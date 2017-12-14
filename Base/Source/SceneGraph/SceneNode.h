@@ -50,6 +50,9 @@ public:
 	// Return the number of children in this group
 	int GetNumOfChild(void);
 
+	//Get children list
+	vector<CSceneNode*> GetChildrenList();
+
 	// Update the Scene Graph
 	void Update(void);
 	// Render the Scene Graph

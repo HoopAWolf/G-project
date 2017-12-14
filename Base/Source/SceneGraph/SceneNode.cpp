@@ -316,6 +316,11 @@ int CSceneNode::GetNumOfChild(void)
 	return NumOfChild;
 }
 
+vector<CSceneNode*> CSceneNode::GetChildrenList()
+{
+	return theChildren;
+}
+
 // Update the Scene Graph
 void CSceneNode::Update(void)
 {

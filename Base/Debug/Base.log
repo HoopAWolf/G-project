@@ -1,5 +1,7 @@
-﻿Build started 23/12/2016 3:23:04 PM.
-
-Build succeeded.
-
-Time Elapsed 00:00:00.02
+﻿  Zombie.cpp
+f:\agdev_enemyfixedfkukevin\agdev stuff\agdev_assignment\agdev_assignment\base\source\enemy\zombie.cpp(327): warning C4305: 'argument': truncation from 'double' to 'float'
+f:\agdev_enemyfixedfkukevin\agdev stuff\agdev_assignment\agdev_assignment\base\source\enemy\zombie.cpp(407): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Application.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Base.vcxproj -> F:\AGDev_EnemyFixedFkUKevin\AGDev stuff\AGDev_Assignment\AGDev_Assignment\Debug\Base.exe
+  Base.vcxproj -> F:\AGDev_EnemyFixedFkUKevin\AGDev stuff\AGDev_Assignment\AGDev_Assignment\Debug\Base.pdb (Full PDB)

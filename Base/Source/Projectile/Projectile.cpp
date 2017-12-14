@@ -136,7 +136,7 @@ void CProjectile::Render(void)
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
-	//modelStack.Scale(scale.x, scale.y, scale.z);
+	modelStack.Scale(GetMaxAABB().x - GetMinAABB().x, GetMaxAABB().y - GetMinAABB().y, GetMaxAABB().y - GetMinAABB().y);
 	RenderHelper::RenderMesh(modelMesh);
 	modelStack.PopMatrix();
 }
@@ -155,6 +155,7 @@ CProjectile* Create::Projectile(const std::string& _meshName,
 
 	CProjectile* result = new CProjectile(modelMesh);
 	result->Set(_position, _direction, m_fLifetime, m_fSpeed);
+	result->SetIsLaser(true);
 	result->SetStatus(true);
 	result->SetCollider(true);
 	result->SetSource(_source);

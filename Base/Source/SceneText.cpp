@@ -22,7 +22,6 @@
 #include "SkyBox/SkyBoxEntity.h"
 #include "SceneGraph\SceneGraph.h"
 #include "SpatialPartition\SpatialPartition.h"
-#include "Waypoint\WaypointManager.h"
 
 #include <iostream>
 using namespace std;
@@ -40,7 +39,6 @@ SceneText::SceneText(SceneManager* _sceneMgr)
 
 SceneText::~SceneText()
 {
-	CWaypointManager::GetInstance()->DropInstance();
 	CSpatialPartition::GetInstance()->RemoveCamera();
 	CSceneGraph::GetInstance()->Destroy();
 }
@@ -148,6 +146,30 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GetMesh("GEO_GRASS_LIGHTGREEN")->textureID = LoadTGA("Image//grass_lightgreen.tga");
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
 
+	MeshBuilder::GetInstance()->GenerateCube("ZombieBodyH", Color(1.0f, 0.0f, 0.0f), 4.0f, 6.0f, 2.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieBodyM", Color(0.0f, 1.0f, 0.0f), 4.0f, 6.0f, 2.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieBodyL", Color(0.0f, 0.0f, 1.0f), 4.0f, 6.0f, 2.0f);
+
+	MeshBuilder::GetInstance()->GenerateCube("ZombieHigh_2", Color(1.0f, 0.0f, 0.0f), 2.0f, 2.0f, 4.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieMid_2", Color(0.0f, 1.0f, 0.0f), 2.0f, 2.0f, 4.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieLow_2", Color(0.0f, 0.0f, 1.0f), 2.0f, 2.0f, 4.0f);
+	
+	MeshBuilder::GetInstance()->GenerateCube("ZombieHigh_4", Color(1.0f, 0.0f, 0.0f), 2.0f, 4.0f, 2.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieMid_4", Color(0.0f, 1.0f, 0.0f), 2.0f, 4.0f, 2.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieLow_4", Color(0.0f, 0.0f, 1.0f), 2.0f, 4.0f, 2.0f);
+	
+	MeshBuilder::GetInstance()->GenerateCube("ZombieHigh_1", Color(1.0f, 0.0f, 0.0f), 2.0f, 2.0f, 4.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieMid_1", Color(0.0f, 1.0f, 0.0f), 2.0f, 2.0f, 4.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieLow_1", Color(0.0f, 0.0f, 1.0f), 2.0f, 2.0f, 4.0f);
+
+	MeshBuilder::GetInstance()->GenerateSphere("ZombieHigh_0", Color(1.0f, 0.0f, 0.0f), 14.0f, 14.0f, 2.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieMid_0", Color(0.0f, 1.0f, 0.0f), 3.0f, 3.0f, 3.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieLow_0", Color(0.0f, 0.0f, 1.0f), 3.0f, 3.0f, 3.0f);
+
+	MeshBuilder::GetInstance()->GenerateCube("ZombieHigh_3", Color(1.0f, 0.0f, 0.0f), 2.0f, 4.0f, 2.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieMid_3", Color(0.0f, 1.0f, 0.0f), 2.0f, 4.0f, 2.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ZombieLow_3", Color(0.0f, 0.0f, 1.0f), 2.0f, 4.0f, 2.0f);
+
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BACK", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_LEFT", Color(1, 1, 1), 1.f);
@@ -165,7 +187,7 @@ void SceneText::Init()
 
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
-	CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
+	//CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
 	CSpatialPartition::GetInstance()->SetCamera(&camera);
 	CSpatialPartition::GetInstance()->SetLevelOfDetails(40000.0f, 160000.0f);
 	EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
@@ -174,57 +196,53 @@ void SceneText::Init()
 	Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 	Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
 
-	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
-	aCube->SetCollider(true);
-	aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-	aCube->InitLOD("cube", "sphere", "cubeSG");
+	//GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
+	//aCube->SetCollider(true);
+	//aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+	//aCube->InitLOD("cube", "sphere", "cubeSG");
 
-	// Add the pointer to this new entity to the Scene Graph
-	CSceneNode* theNode = CSceneGraph::GetInstance()->AddNode(aCube);
-	if (theNode == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
+	//// Add the pointer to this new entity to the Scene Graph
+	//CSceneNode* theNode = CSceneGraph::GetInstance()->AddNode(aCube);
+	//if (theNode == NULL)
+	//{
+	//	cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
+	//}
 
-	GenericEntity* anotherCube = Create::Entity("cube", Vector3(-20.0f, 1.1f, -20.0f));
-	anotherCube->SetCollider(true);
-	anotherCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-	CSceneNode* anotherNode = theNode->AddChild(anotherCube);
-	if (anotherNode == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
+	//GenericEntity* anotherCube = Create::Entity("cube", Vector3(-20.0f, 1.1f, -20.0f));
+	//anotherCube->SetCollider(true);
+	//anotherCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+	//CSceneNode* anotherNode = theNode->AddChild(anotherCube);
+	//if (anotherNode == NULL)
+	//{
+	//	cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
+	//}
+	//
+	//GenericEntity* baseCube = Create::Asset("cube", Vector3(0.0f, 0.0f, 0.0f));
+	////baseCube->SetCollider(true);
+	////baseCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+	//CSceneNode* baseNode = CSceneGraph::GetInstance()->AddNode(baseCube);
+
+	//CUpdateTransformation* baseMtx = new CUpdateTransformation();
+	//baseMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
+	//baseMtx->SetSteps(-60, 60);
+	//baseNode->SetUpdateTransformation(baseMtx);
+
+	//GenericEntity* childCube = Create::Asset("cubeSG", Vector3(0.0f, 0.0f, 0.0f));
+	////childCube->SetCollider(true);
+	////childCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+	//CSceneNode* childNode = baseNode->AddChild(childCube);
+	//childNode->ApplyTranslate(0.0f, 1.0f, 0.0f);
+
+	//GenericEntity* grandchildCube = Create::Asset("cubeSG", Vector3(0.0f, 0.0f, 0.0f));
+	////grandchildCube->SetCollider(true);
+	////grandchildCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+	//CSceneNode* grandchildNode = childNode->AddChild(grandchildCube);
+	//grandchildNode->ApplyTranslate(0.0f, 0.0f, 1.0f);
+	//CUpdateTransformation* aRotateMtx = new CUpdateTransformation();
+	//aRotateMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
+	//aRotateMtx->SetSteps(-120, 60);
+	//grandchildNode->SetUpdateTransformation(aRotateMtx);
 	
-	GenericEntity* baseCube = Create::Asset("cube", Vector3(0.0f, 0.0f, 0.0f));
-	CSceneNode* baseNode = CSceneGraph::GetInstance()->AddNode(baseCube);
-
-	CUpdateTransformation* baseMtx = new CUpdateTransformation();
-	baseMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
-	baseMtx->SetSteps(-60, 60);
-	baseNode->SetUpdateTransformation(baseMtx);
-
-	GenericEntity* childCube = Create::Asset("cubeSG", Vector3(0.0f, 0.0f, 0.0f));
-	CSceneNode* childNode = baseNode->AddChild(childCube);
-	childNode->ApplyTranslate(0.0f, 1.0f, 0.0f);
-
-	GenericEntity* grandchildCube = Create::Asset("cubeSG", Vector3(0.0f, 0.0f, 0.0f));
-	CSceneNode* grandchildNode = childNode->AddChild(grandchildCube);
-	grandchildNode->ApplyTranslate(0.0f, 0.0f, 1.0f);
-	CUpdateTransformation* aRotateMtx = new CUpdateTransformation();
-	aRotateMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
-	aRotateMtx->SetSteps(-120, 60);
-	grandchildNode->SetUpdateTransformation(aRotateMtx);
-	
-	// Create a Waypoint inside WaypointManager
-	int aWayPoint = CWaypointManager::GetInstance()->AddWaypoint(Vector3(10.0f, 0.0f, 50.0f));
-	int anotherWaypoint = CWaypointManager::GetInstance()->AddWaypoint(aWayPoint, Vector3(10.0f, 0.0f, -50.0f));
-	CWaypointManager::GetInstance()->AddWaypoint(anotherWaypoint, Vector3(-10.0f, 0.0f, 0.0f));
-	CWaypointManager::GetInstance()->PrintSelf();
-
-	// Create a CEnemy instance
-	theEnemy = new CEnemy();
-	theEnemy->Init();
-
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 //	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
@@ -238,7 +256,21 @@ void SceneText::Init()
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
 	playerInfo->SetTerrain(groundEntity);
-	theEnemy->SetTerrain(groundEntity);
+
+	// Create a CEnemy instance
+	srand(time(NULL));
+	for (int i = 0; i < 10; i++)
+	{
+		theEnemy = new Zombie();
+		float x = 30.0f + (i * rand() % 1000 - 500.0f);
+		float y = 30.0f + (i * rand() % 1000 - 500.0f);
+		theEnemy->SetRandomSeed(rand());
+		theEnemy->Init(x, y);
+		theEnemy->SetTerrain(groundEntity);
+		theEnemy->SetTarget(theEnemy->GenerateTarget());
+		//theEnemy->SetScale(Vector3(10.f, 10.f, 10.f));
+		theEnemy = NULL;
+	}
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;

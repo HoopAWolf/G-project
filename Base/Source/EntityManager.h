@@ -5,6 +5,7 @@
 #include <list>
 #include "Vector3.h"
 #include "SpatialPartition\SpatialPartition.h"
+#include "Projectile/Projectile.h"
 
 class EntityBase;
 
@@ -32,6 +33,8 @@ private:
 	bool CheckSphereCollision(EntityBase *ThisEntity, EntityBase *ThatEntity);
 	// Check if this entity collided with another entity, but both must have collider
 	bool CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEntity);
+	// Check if this entity's bounding sphere collided with that entity's bounding sphere 
+	bool CheckSphereProjectileCollision(EntityBase *ThisEntity, CProjectile *ThatEntity);
 	// Check for intersection between a line segment and a plane
 	bool GetIntersection(const float fDst1, const float fDst2, Vector3 P1, Vector3 P2, Vector3 &Hit);
 	// Check for intersection between a line segment and a plane
