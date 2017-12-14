@@ -312,13 +312,13 @@ void Zombie::Update(double dt)
 			}
 			else if (temp->GetType() == EntityZombiePart::LEFT_LEG)
 			{
-				new_position = baseNode->GetEntity()->GetPosition() - (viewVector.Cross(up) * 1.5);
+				new_position = baseNode->GetEntity()->GetPosition() - (viewVector.Cross(up) * 1.1);
 				new_position.y -= 5;
 				temp->SetPosition(new_position);
 			}
 			else if (temp->GetType() == EntityZombiePart::RIGHT_LEG)
 			{
-				new_position = baseNode->GetEntity()->GetPosition() + (viewVector.Cross(up) * 1.5);
+				new_position = baseNode->GetEntity()->GetPosition() + (viewVector.Cross(up) * 1.1);
 				new_position.y -= 5;
 				temp->SetPosition(new_position);
 			}
@@ -339,7 +339,7 @@ void Zombie::Update(double dt)
 	{
 		if (m_dSpeed != 1)
 			m_dSpeed = 1;
-		if (position.y > -5)
+		if (position.y > -9)
 		{
 			position.y -= 0.7f;
 			target.y = position.y;
@@ -385,7 +385,13 @@ void Zombie::Render(void)
 	Vector3 viewVector = (target - position).Normalized();
 	float angle = Math::RadianToDegree(atan2(viewVector.x, viewVector.z));
 	modelStack.Translate(position.x, position.y, position.z);
-	modelStack.Rotate(angle, 0, 1, 0);
+	if(got_leg)
+		modelStack.Rotate(angle, 0, 1, 0);
+	else
+	{
+		modelStack.Rotate(angle, 0, 1, 0);
+		modelStack.Rotate(25, 1, 0, 0);
+	}
 	//std::cout << position.x << "," << position.y << "," << position.z << std::endl;
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	if (GetLODStatus() == true)
@@ -417,6 +423,11 @@ int Zombie::GetHealth()
 	return m_health;
 }
 
+bool Zombie::GetGotLeg()
+{
+	return got_leg;
+}
+
 // Set random seed
 void Zombie::SetRandomSeed(const int m_iSeed)
 {
@@ -424,6 +435,7 @@ void Zombie::SetRandomSeed(const int m_iSeed)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////ZOMBIE PARTS/////////////////////////////////////////////////////////////////////////////////////
+float rotating = 0;
 EntityZombiePart::EntityZombiePart(int part_input) : GenericEntity(NULL), part(static_cast<PARTS>(part_input))
 {
 	if(part == RIGHT_ARM || part == LEFT_ARM || part == HEAD)
@@ -459,6 +471,7 @@ EntityZombiePart::PARTS EntityZombiePart::GetType()
 
 void EntityZombiePart::Render(void)
 {
+	rotating += 0.0015;
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	Zombie hello;
@@ -466,6 +479,16 @@ void EntityZombiePart::Render(void)
 	float angle = Math::RadianToDegree(atan2(viewVector.x, viewVector.z));
 	modelStack.Translate(position.x, position.y, position.z);
 	modelStack.Rotate(angle, 0, 1, 0);
+
+	if (part == RIGHT_ARM || part == LEFT_ARM)
+	{
+		modelStack.Rotate(cosf(rotating) * 3 * ((part == RIGHT_ARM) ? -1 : 1), 1, 1, 0);
+		if(!parent->GetGotLeg())
+			modelStack.Rotate(25, 1, 0, 0);
+	}
+	else if (part == RIGHT_LEG || part == LEFT_LEG)
+		modelStack.Rotate(cosf(rotating) * 8 * ((part == RIGHT_LEG) ? -1: 1), 1, 0, 0);
+
 
 	//std::cout << position.x << "," << position.y << "," << position.z << std::endl;
 	modelStack.Scale(scale.x, scale.y, scale.z);

@@ -65,6 +65,7 @@ public:
 
 	void SetHealth(const int newHealth);
 	int GetHealth();
+	bool GetGotLeg();
 };
 
 class EntityZombiePart : public GenericEntity
